@@ -183,14 +183,17 @@ export default class Collapsible extends Component {
     const { collapsed, enablePointerEvents } = this.props;
     const { height, contentHeight, measuring, measured } = this.state;
     const hasKnownHeight = !measuring && (measured || collapsed);
-    const style = hasKnownHeight && {
+    const style = {
       overflow: 'hidden',
-      height: height,
+      height: height, // height value regulates everything we need
     };
-    const contentStyle = {};
+    const contentStyle = {};  
+    contentStyle.position = 'absolute'; // 2. Always apply position: absolute
+    contentStyle.width = '100%';
     if (measuring) {
-      contentStyle.position = 'absolute';
-      contentStyle.opacity = 0;
+      // but here we the the inner child Animated.View to position absolute which takes it out of the flow
+     contentStyle.position = 'absolute';
+     contentStyle.opacity = 0;
     } else if (this.props.align === 'center') {
       contentStyle.transform = [
         {
